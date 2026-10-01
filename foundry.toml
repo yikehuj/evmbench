@@ -3,7 +3,7 @@ src = "src"
 out = "out"
 libs = ["lib"]
 remappings = ["@bananapus/=node_modules/@bananapus/", "@openzeppelin/=node_modules/@openzeppelin/", "@uniswap/=node_modules/@uniswap/", "@croptop/=node_modules/@croptop/", "@prb/=node_modules/@prb/", "solady/=node_modules/solady/", "forge-std/=lib/forge-std/src/"]
-solc = "0.8.23"
+solc = "/opt/solc/solc-0.8.23"
 optimizer = true
 optimizer_runs = 200
 via_ir = true
