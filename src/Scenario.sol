@@ -105,6 +105,6 @@ contract Scenario {
         deployer = new MockDeployer(IJBController(address(controller)), IJBDirectory(address(directory)), IJBProjects(address(projects)));
         projects.setOwner(address(deployer));
         loans = new REVLoans(IREVDeployer(address(deployer)), REV_ID, address(this), IPermit2(address(0)), address(0));
-        (bool ok,) = address(terminal).call{value: 100 ether}(""); require(ok);
+        (bool ok,) = address(terminal).call{value: msg.value}(""); require(ok);
     }
 }
