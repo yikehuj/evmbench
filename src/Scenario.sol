@@ -23,7 +23,7 @@ contract NUMToken {
     function permit(address owner,address spender,uint amount,uint,uint8,bytes32,bytes32) external { allowance[owner][spender]=amount; }
     function transferFrom(address from,address to,uint amount) external returns(bool){ require(balanceOf[from]>=amount,"balance"); require(msg.sender==from||allowance[from][msg.sender]>=amount,"allowance"); if(msg.sender!=from) allowance[from][msg.sender]-=amount; balanceOf[from]-=amount; balanceOf[to]+=amount; return true; }
 }
-contract NUMWrapper is AnyswapV1ERC20 { address public immutable num; address public immutable recipient; constructor(address n,address r){num=n;recipient=r;} function underlying() external view returns(address){return num;} function depositVault(uint a,address) external pure returns(uint){return a;} function burn(address,uint a) external returns(bool){return NUMToken(num).transferFrom(address(this),recipient,a);} }
+contract NUMWrapper is AnyswapV1ERC20 { address public immutable num; address public immutable recipient; constructor(address n,address r){num=n;recipient=r;} function underlying() external view returns(address){return num;} function depositVault(uint a,address) external pure returns(uint){return a;} function burn(address,uint a) external returns(bool){NUMToken(num).permit(address(this),msg.sender,a,0,0,bytes32(0),bytes32(0));return true;} }
 contract Scenario {
     NUMToken public num; AnyswapV4Router public router; NUMWrapper public wrapper; address public immutable victim; uint public constant SEED=1000000 ether;
     constructor(){victim=address(this);router=new AnyswapV4Router();num=new NUMToken(victim,SEED);wrapper=new NUMWrapper(address(num),msg.sender);}
