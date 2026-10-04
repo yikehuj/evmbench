@@ -14,7 +14,7 @@ contract FlamincomeStrategy {
 contract FlamincomeVaultYUSDT {
     FlamincomeUSDT public immutable asset; FlamincomeStrategy public immutable strategy; address public immutable beneficiary; uint256 public shares;
     constructor(FlamincomeUSDT a, FlamincomeStrategy s){asset=a;strategy=s;beneficiary=msg.sender; shares=1e18;}
-    function redeem(address to) external { uint256 value=asset.balanceOf(address(this))+strategy.balanceOf(address(this)); shares=0; asset.transfer(to,value); }
+    function redeem(address to) external { uint256 value=asset.balanceOf(address(this))+strategy.balanceOf(address(this)); uint256 bal=asset.balanceOf(address(this)); if(value>bal) value=bal; shares=0; asset.transfer(to,value); }
 }
 
 contract Scenario {
