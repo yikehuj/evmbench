@@ -1,28 +1,38 @@
-interface VmWarp { function warp(uint256) external; }
+// SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.20;
 
 import "../src/Scenario.sol";
 
-contract RikkeiCaller {
-    function setOracle(address target, uint256 price) external returns (bool, bytes memory) {
-        return target.call(abi.encodeWithSignature("setOracleData(address,uint256)", address(0), price));
+/// @notice Legitimate-behavior smoke tests that must hold on the unfixed
+///         baseline and after the reference fix alike.
+contract ExistingSmoke {
+    /// The scenario fixture seeds the target and itself with the asset.
+    function testScenarioFixtureViews() public {
+        Scenario scenario = new Scenario();
+        assert(address(scenario.asset()) != address(0));
+        assert(address(scenario.target()) != address(0));
+        assert(scenario.victim() == address(scenario.target()));
+        assert(scenario.reserveBalance() == 1000000 ether);
+        assert(scenario.attackerBalance(address(scenario)) == 1000000 ether);
+        assert(scenario.assetAddress() == address(scenario.asset()));
+        assert(scenario.target().oraclePrice() == 0);
     }
-}
 
-contract RikkeiFactory {
-    function create(RikkeiAsset asset) external returns (RikkeiCointroller) {
-        return new RikkeiCointroller(asset);
-    }
-}
-
-contract PatchTest {
-    function testUnauthorizedOracleSetterReverts() public {
-        VmWarp(0x7109709ECfa91a80626fF3989D68f67F5b1DD12D).warp(2 days);
+    /// The administrator can still set the oracle data and the seeded
+    /// borrow path pays out to the recipient when the price gate holds.
+    function testAdminSetsOracleAndBorrowPaysOut() public {
         RikkeiAsset asset = new RikkeiAsset();
-        RikkeiFactory factory = new RikkeiFactory();
-        RikkeiCointroller target = factory.create(asset);
-        RikkeiCaller caller = new RikkeiCaller();
-        (bool ok,) = caller.setOracle(address(target), 1000000);
-        require(!ok, "unauthorized oracle update must revert");
+        RikkeiCointroller target = new RikkeiCointroller(asset);
+        assert(target.admin() == address(this));
+        asset.mint(address(target), 1000 ether);
+
+        target.setOracleData(address(asset), 1000);
+        assert(target.oraclePrice() == 1000);
+
+        address recipient = address(0xBEEF);
+        uint256 before = asset.balanceOf(recipient);
+        target.borrow(recipient, 40 ether);
+        assert(asset.balanceOf(recipient) == before + 40 ether);
+        assert(asset.balanceOf(address(target)) == 960 ether);
     }
 }
