@@ -1,0 +1,23 @@
+[profile.default]
+src = "src"
+out = "out"
+libs = ["lib"]
+test = "test"
+# Pinned local compiler binary: the audit image ships solc 0.8.33 at
+# /opt/solc/solc-0.8.33 (sha256 recorded in the Dockerfile), so every build --
+# image build, deploy phase, grader test runs -- resolves the compiler
+# offline. Every pragma in the tree (^0.8.20 / ^0.8.33) is satisfied by
+# 0.8.33.
+solc = "/opt/solc/solc-0.8.33"
+solc_version = "0.8.33"
+optimizer = true
+optimizer_runs = 1000
+evm_version = "cancun"
+via_ir = true
+bytecode_hash = "none"
+cbor_metadata = false
+remappings = [
+    "@openzeppelin/=lib/openzeppelin-contracts/",
+    "@prb/math/=lib/prb-math/",
+    "prb-math/=lib/prb-math/src/",
+]
