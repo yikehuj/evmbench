@@ -1,0 +1,21 @@
+[profile.default]
+src = "src"
+out = "out"
+libs = ["lib"]
+test = "test"
+optimizer = true
+optimizer_runs = 200
+evm_version = "istanbul"
+fs_permissions = [{ access = "read", path = "./" }]
+
+# No single `solc` pin: this is a multi-compiler tree. Per-file pragma
+# auto-detection selects the compiler per source file:
+#   src/BFBToken.sol / src/BFBCore.sol -> ^0.8.16 (built with 0.8.30, the
+#     version of the verified BscScan deployment the task reproduces)
+#   src/periphery/PancakePair.sol, PancakeFactory.sol, PancakeERC20.sol,
+#     libraries -> =0.5.16 (Pancake V2 core)
+#   src/periphery/PancakeRouter.sol -> flattened 0.6.6 periphery build
+# istanbul is the one EVM version all three compiler families accept and is
+# what the Pancake core/periphery BSC deployments were built with.
+# The Dockerfile pre-places solc 0.5.16, 0.6.6 and 0.8.30 under ~/.svm so the
+# offline build resolves every version locally instead of downloading.
