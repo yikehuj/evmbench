@@ -57,7 +57,7 @@ contract ExistingSmokeTest is LbpWorld {
         usdt.transfer(address(pair), 100 * 1e18);
         lbp.transfer(address(pair), 100 * 1e18);
         pair.mint(address(this));
-        lbp.transfer(address(this), address(this), 0); // settle
+        lbp.transfer(address(this), 0); // settle
 
         uint256 increment = hr.balanceOf(address(this)) - before;
         require(
@@ -73,7 +73,7 @@ contract ExistingSmokeTest is LbpWorld {
         // revert.
         uint256 lbpBefore = lbp.balanceOf(address(this));
         uint256 hrBefore = hr.balanceOf(address(this));
-        lbp.transfer(address(this), address(this), 0);
+        lbp.transfer(address(this), 0);
         require(lbp.balanceOf(address(this)) == lbpBefore, "smoke: LBP moved");
         require(hr.balanceOf(address(this)) == hrBefore, "smoke: hashrate moved");
     }

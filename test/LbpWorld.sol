@@ -184,7 +184,7 @@ abstract contract LbpWorld {
         pair.mint(address(this));
         // Flush the bootstrap stage so the seed LP's honest hashrate
         // materialises (Layer 7a settle on a zero-value self transfer).
-        lbp.transfer(address(this), address(this), 0);
+        lbp.transfer(address(this), 0);
 
         // ---------- 30-minute TWAP cascade at the honest 1:1 price ----------
         // Three rotations 10 minutes apart fill the old/mid/new ladder, so
@@ -192,7 +192,7 @@ abstract contract LbpWorld {
         // the patched settle's TWAP clamp is inert without it.
         for (uint256 i = 0; i < 3; i++) {
             VM.warp(block.timestamp + 600);
-            lbp.transfer(address(this), address(this), 0);
+            lbp.transfer(address(this), 0);
         }
     }
 
