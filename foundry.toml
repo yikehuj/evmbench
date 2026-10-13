@@ -1,0 +1,11 @@
+[profile.default]
+src = "src"
+test = "test"
+out = "out"
+libs = ["lib"]
+optimizer = true
+optimizer_runs = 50
+evm_version = "london"
+solc = "/opt/solc/solc-0.8.20"
+solc_version = "0.8.20"
+verbosity = 2
