@@ -1,0 +1,21 @@
+[submodule "lib/forge-std"]
+	branch = v1
+	path = lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
+[submodule "lib/openzeppelin-contracts"]
+	path = lib/openzeppelin-contracts
+	url = https://github.com/openzeppelin/openzeppelin-contracts
+	branch = release-v4.9
+[submodule "lib/prb-math"]
+	branch = v4
+	path = lib/prb-math
+	url = https://github.com/PaulRBerg/prb-math
+[submodule "lib/owner-manager-contracts"]
+	path = lib/owner-manager-contracts
+	url = https://github.com/pooltogether/owner-manager-contracts
+[submodule "lib/pt-v5-twab-controller"]
+	path = lib/pt-v5-twab-controller
+	url = https://github.com/GenerationSoftware/pt-v5-twab-controller
+[submodule "lib/ring-buffer-lib"]
+	path = lib/ring-buffer-lib
+	url = https://github.com/GenerationSoftware/ring-buffer-lib
