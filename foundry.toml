@@ -1,0 +1,16 @@
+[profile.default]
+src = "contracts"
+test = "test"
+out = "out"
+libs = ["lib"]
+
+remappings = [
+    "ds-test/=lib/ds-test/src/",
+    "forge-std/=lib/forge-std/src/",
+]
+
+solc = "0.8.20"
+evm_version = "london"
+optimizer = true
+optimizer_runs = 1000
+via_ir = true
