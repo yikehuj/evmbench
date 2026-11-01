@@ -1,0 +1,20 @@
+[profile.default]
+src = "contracts"
+test = "test"
+out = "out"
+libs = ["lib"]
+
+remappings = [
+    "ds-test/=lib/ds-test/src/",
+    "forge-std/=lib/forge-std/src/",
+    "@openzeppelin/contracts/=lib/openzeppelin-contracts/",
+    "@aave/core-v3/=lib/aave-core-v3/",
+    "@aave/periphery-v3/=lib/aave-periphery-v3/",
+    "@pooltogether/owner-manager-contracts/=lib/owner-manager-contracts/",
+    "@pooltogether/yield-source-interface/=lib/yield-source-interface/",
+]
+
+solc = "0.8.10"
+evm_version = "london"
+optimizer = true
+optimizer_runs = 200
