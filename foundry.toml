@@ -1,0 +1,19 @@
+[profile.default]
+src = "silo-vaults/contracts"
+test = "test"
+out = "out"
+libs = ["gitmodules"]
+
+remappings = [
+    "forge-std/=gitmodules/forge-std/src/",
+    "openzeppelin5/=gitmodules/openzeppelin-contracts-5/contracts/",
+    "morpho-blue/=gitmodules/morpho-blue/src/",
+    "silo-core/=silo-core/",
+    "silo-vaults/=silo-vaults/",
+]
+
+solc = "0.8.28"
+evm_version = "cancun"
+optimizer = true
+optimizer_runs = 200
+allow_internal_expect_revert = true
