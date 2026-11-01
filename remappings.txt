@@ -1,0 +1,5 @@
+@openzeppelin/contracts/=lib/openzeppelin-contracts/
+@openzeppelin/contracts-upgradeable/=lib/openzeppelin-contracts-upgradeable/
+@morpho-org/morpho-blue/=lib/morpho-blue/
+forge-std/=lib/forge-std/src/
+ds-test/=lib/ds-test/src/
