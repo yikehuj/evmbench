@@ -79,6 +79,13 @@ library FullMath {
         assembly {
             twos := add(div(sub(0, twos), twos), 1)
         }
+        // EDIT #2 for 0.8 compatibility: the statement below and the
+        // modular-inverse Newton-Raphson iteration and final multiplication
+        // further down intentionally rely on wrapping (mod-2**256) arithmetic
+        // from the original (pre-0.8) implementation. Under Solidity >=0.8
+        // checked arithmetic they panic (0x11) whenever this 512-by-256
+        // division path is taken, so they must run unchecked.
+        unchecked {
         prod0 |= prod1 * twos;
 
         // Invert denominator mod 2**256
@@ -104,6 +111,7 @@ library FullMath {
         // We don't need to compute the high bits of the result and prod1
         // is no longer required.
         result = prod0 * inv;
+        }
         return result;
     }
 
